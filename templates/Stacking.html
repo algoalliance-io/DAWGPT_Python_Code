@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect MetaMask</title>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.5/dist/web3.min.js"></script>
+
+      <style>
+                  html, body {
+            padding: 0;
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            outline: none;
+            box-shadow: 0 1px 5px 0 #e6e9ef;
+            background: #ffffff;
+            color: #000;
+            border-radius: 99px;
+            padding: 16px 32px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        #connectButton {
+            margin-bottom: 16px;
+            color: #eb874b;
+        }
+
+        #connectButton img {
+            width: 36px;
+            margin-right: 16px;
+        }
+
+        #walletID span{
+            max-width: 90%;
+            margin: 0 auto;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        #mobileDeviceWarning {
+            display: none;
+            margin-top: 24px;
+            color: rgb(247, 47, 47);
+        }
+
+        #mobileDeviceWarning.show {
+            display: block;
+        }
+
+        .alert {
+            z-index: 10;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+            background: #ffffff;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert .button {
+            margin-top: 24px;
+        }
+
+        /* Loading dots styles */
+        @keyframes opacity {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .loadingButton {
+            pointer-events: none;
+        }
+
+        .loadingButton #loading {
+            display: flex;
+        }
+
+        #loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border-radius: 99px;
+        }
+
+        #loading span:not(:last-child) {
+            margin-right: 5px;
+        }
+
+        #loading span {
+            animation-name: opacity;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+        }
+
+        #loading span:nth-child(2) {
+            animation-delay: 100ms;
+            animation-delay: 100ms;
+        }
+
+        #loading span:nth-child(3) {
+            animation-delay: 300ms;
+            animation-delay: 300ms;
+        }
+      </style>
+
+
+
+  </head>
+  <body>
+    <div class="container">
+
+          <form method="POST" >
+            <label for="amount">Amount of USDT to send:</label>
+            <input type="text" id="amount" name="amount" required>
+            <button type="submit">Send USDT with MetaMask</button>
+          </form>
+
+    </div>
+
+
+
+      <script>
+
+
+        const sendTx = async () => {
+            // Controlla che l'utente abbia installato MetaMask
+            if (typeof window.ethereum === 'undefined') {
+              alert('Please install MetaMask to send USDT.');
+              return;
+            }
+           // WalletKey={WalletKey}
+
+            const USDT_ABI = [
+                {
+                  "inputs": [
+                    {
+                      "internalType": "address",
+                      "name": "_to",
+                      "type": "address"
+                    },
+                    {
+                      "internalType": "uint256",
+                      "name": "_value",
+                      "type": "uint256"
+                    }
+                  ],
+                  "name": "transfer",
+                  "outputs": [
+                    {
+                      "internalType": "bool",
+                      "name": "",
+                      "type": "bool"
+                    }
+                  ],
+                  "stateMutability": "nonpayable",
+                  "type": "function"
+                }
+              ];
+
+            const USDT_ADDRESS = '0xdac17f958d2ee523a2206206994597c13d831ec7';
+
+            // Richiedi l'autorizzazione all'utente per accedere al suo wallet MetaMask
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            // Accedi al provider Web3 di MetaMask
+            const provider = new Web3(window.ethereum);
+
+            // Crea un nuovo oggetto per l'interfaccia del contratto USDT
+            const contract = new provider.eth.Contract(USDT_ABI, USDT_ADDRESS);
+
+            // Recupera l'indirizzo del wallet dell'utente
+            const sender = accounts[0];
+
+            // Recupera l'importo inserito dall'utente nel form
+            const amount = document.getElementById('amount').value;
+
+            // Conferma la transazione con MetaMask
+            const tx = await contract.methods.transfer("0x865997f90bf55b694098cdb8e92bad3f9b035f54", amount).send({ from: sender });
+
+            // Mostra un messaggio di conferma all'utente
+            alert('Transaction confirmed! TX hash: ' + tx.transactionHash);
+          };
+
+
+        // Rileva il click del pulsante "Invia USDT con MetaMask"
+        const sendTxButton = document.querySelector('button[type="submit"]');
+        sendTxButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Previeni il comportamento predefinito del pulsante
+        sendTx(); // Chiama la funzione sendTx()
+      });
+
+      </script>
+
+  </body>
+</html>

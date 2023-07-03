@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+     <style>
+      /* Stile per il menu laterale */
+      .sidenav {
+        height: 100%;
+        width: 200px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #f2f2f2;
+        overflow-x: hidden;
+        padding-top: 20px;
+          list-style: none;
+      }
+
+      .sidenav a {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #818181;
+        display: block;
+      }
+
+      .sidenav a:hover {
+        color: #cccccc;
+      }
+
+      /* Stile per il contenuto della pagina */
+      .main {
+        margin-left: 200px; /* Imposta il margine sinistro in modo che il contenuto non sia coperto dal menu laterale */
+        padding: 20px 10px;
+      }
+    </style>
+</head>
+<body class="main">
+    <div id="sidebar" class="sidenav" >
+      <a href="/dashboard">Dashboard</a>
+      <a href="/Affiliates">Affiliates</a>
+      <a href="/Stacking">Stacking Pack</a>
+      <a href="/Rewards">Rewards</a>
+      <a href="#notifications">Notifications</a>
+    </div>
+
+    <div id="main">
+          <h3>Network Balances:</h3>
+          <h3>Level1: {{Balance1}}</h3>
+          <h3>Level2: {{Balance2}}</h3>
+          <h3>Level3: {{Balance3}}</h3>
+          <h3>Level4: {{Balance4}}</h3>
+
+          <h3>Personal Earnings: {{PersonalEarnings}}</h3>
+          <h3>Network Earnings: {{TotalNetworkEarnings}}</h3>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registrazione e accesso</title>
+</head>
+<body>
+	<h1>Registrazione</h1>
+	<form id="register-form" >
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required><br><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required><br><br>
+
+		<label for="Refferal">Refferal Link:</label>
+		<input type="text" id="Refferal" name="Refferal" required><br><br>
+		<button type="submit">Registrati</button>
+	</form>
+
+
+	<script>
+		// Registrazione
+		document.getElementById('register-form').addEventListener('submit', function(e) {
+			e.preventDefault();
+			let username = document.getElementById('username').value;
+			let password = document.getElementById('password').value;
+			let refferal = document.getElementById('Refferal').value;
+			fetch('/register', {
+				method: 'POST',
+				body: JSON.stringify({
+					username: username,
+					password: password,
+					refferal: refferal
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(response => response.json())
+			.then(data => alert(data.message))
+			.catch(error => console.error(error));
+		});
+
+
+	</script>
+</body>
+</html>

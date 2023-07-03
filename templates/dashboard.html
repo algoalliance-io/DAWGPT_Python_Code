@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+     <style>
+      /* Stile per il menu laterale */
+      .sidenav {
+        height: 100%;
+        width: 200px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #f2f2f2;
+        overflow-x: hidden;
+        padding-top: 20px;
+          list-style: none;
+      }
+
+      .sidenav a {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 20px;
+        color: #818181;
+        display: block;
+      }
+
+      .sidenav a:hover {
+        color: #cccccc;
+      }
+
+      /* Stile per il contenuto della pagina */
+      .main {
+        margin-left: 200px; /* Imposta il margine sinistro in modo che il contenuto non sia coperto dal menu laterale */
+        padding: 20px 10px;
+      }
+    </style>
+</head>
+<body class="main">
+    <div id="sidebar" class="sidenav" >
+      <a href="/dashboard">Dashboard</a>
+      <a href="/Affiliates">Affiliates</a>
+      <a href="/Stacking">Stacking Pack</a>
+      <a href="/Rewards">Rewards</a>
+      <a href="#notifications">Notifications</a>
+    </div>
+
+    <div id="main">
+        <h1>Dashboard</h1>
+        <h3>Current Balance: {{ Current_balance }} USDAW</h3>
+        <h3>Available Balance: {{ AvailableBalance }} USDAW</h3>
+        <form method="POST" action="{{ url_for('update_public_key') }}">
+            <label for="public_key">Inserisci Chiave Publica:</label>
+            <input type="text" id="public_key" name="public_key" value="{{PublicKey}}">
+            <button type="submit" id="update_public_key">Inserisci</button>
+        </form>
+        <form method="POST" action="{{ url_for('Reinvest_balance') }}">
+            <label for="public_key">Inserisci USDAW da reinvestire:</label>
+            <input type="text" id="Reinvest_balance" name="Reinvest_balance">
+            <button type="submit" id="Reinvest_balance_in">Inserisci</button>
+        </form>
+        <form method="POST" action="{{ url_for('WithdrawCrypto') }}">
+            <label for="Withdraw_balance">Inserisci USDAW da Ritirare:</label>
+            <input type="text" id="Withdraw_balance" name="Withdraw_balance">
+            <button type="submit" id="Withdraw_balance_in">Inserisci</button>
+        </form>
+
+
+         <h3>Transactions:</h3>
+      <ul>
+
+          {% block content %}
+            {% for transaction in transactions_list %}
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-sm-4"><strong>Date:</strong> {{transaction.Data}}</div>
+                        <div class="col-sm-4"><strong>Amount:</strong> {{transaction.Amount}}</div>
+                        <div class="col-sm-4"><strong>Transaction Hash:</strong> {{transaction.TransactionHash}}</div>
+                        <div class="col-sm-4"><strong>Status:</strong> {{transaction.Status}}</div>
+                    </div>
+                </li>
+            {% endfor %}
+          {% endblock %}
+      </ul>
+
+    </div>
+</body>
+</html>

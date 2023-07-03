@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registrazione e accesso</title>
+</head>
+<body>
+
+	<h1>Accesso</h1>
+	<form id="login-form">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" required><br><br>
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" required><br><br>
+		<button type="submit" >Accedi</button>
+	</form>
+
+	<script>
+		// Accesso
+		document.getElementById('login-form').addEventListener('submit', function(e) {
+			e.preventDefault();
+			let username = document.getElementById('username').value;
+			let password = document.getElementById('password').value;
+			fetch('/login', {
+				method: 'POST',
+				body: JSON.stringify({
+					username: username,
+					password: password
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(response => {
+				/*
+				if (response.ok) {
+
+					alert('Accesso consentito');
+				} else {
+					alert('Credenziali non valide');
+				}*/
+
+
+			})
+
+			.catch(error => console.error(error));
+		});
+	</script>
+</body>
+</html>
